@@ -13,11 +13,22 @@ public class SeatingChart {
         Student[][] order = getBestChart();
     }
 
-    public Student[][] getBestChart() {
-        ArrayList<Student> newOrder;
+    public Student[][] getBestChart() {;
         for(int i = 0; i < priorities.size(); i++) {
-            newOrder = sort(newOrder(priorites[i]))
+            students = sort(priorities.get(i));
         }
         return new Student[][]{};
+    }
+
+    public ArrayList<Student> sort(String priority) {
+        ArrayList<Student> newOrder = new ArrayList();
+        for(int i = 0; i < students.size(); i++) {
+            for(int j = 0; j < students.size(); j++) {
+                //temp
+                int a = 1;
+            }
+        }
+        return new ArrayList<Student>();
+
     }
 }
