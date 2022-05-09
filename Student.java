@@ -47,7 +47,13 @@ public class Student {
         return avoid;
     }
 
+    public void setNear(Student student) {
+        near.add(student);
+    }
 
+    public void setAvoid (Student student) {
+        avoid.add(student);
+    }
 
 
 
