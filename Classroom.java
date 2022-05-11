@@ -1,7 +1,11 @@
 public class Classroom {
-    private int test;
+    private boolean[][] classroom;
 
-    public Classroom(int test) {
-        this.test = test;
+    public Classroom() {
+        displayGrid();
+    }
+
+    public void displayGrid() {
+
     }
 }
