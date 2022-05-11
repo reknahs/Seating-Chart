@@ -7,7 +7,8 @@ import java.util.Set;
 
 public class Class {
 
-    private Hashtable<String, Student> students = new Hashtable<String, Student>();
+    private Hashtable< Integer, Student> students = new Hashtable< Integer, Student>();
+    private Set<Integer> setOfKeys = students.keySet();
 
 
     public Class (File file) throws FileNotFoundException {
@@ -16,8 +17,14 @@ public class Class {
         while (scan.hasNextLine()) {
             String [] name = scan.nextLine().split(" ");
             Student student = new Student (name[0], name[1]);
-            String id = UUID.randomUUID().toString();
+            UUID idOne = UUID.randomUUID();
+            String str=""+idOne;        
+            int uid=str.hashCode();
+            String filterStr=""+uid;
+            str=filterStr.replaceAll("-", "");
+            Integer id = Integer.parseInt(str);
             students.put(id, student);
+            student.setId(id);
         }
     }
 
@@ -25,10 +32,12 @@ public class Class {
        return students.get(id);
     }
 
-    public void listStudents () {
-        Set<String> setOfKeys = students.keySet();
-        
-        for (String c : setOfKeys) {
+    public Hashtable<Integer, Student> getStudentDict () {
+        return students;
+    } 
+
+    public void listStudents () {        
+        for (Integer c : setOfKeys) {
             System.out.println(students.get(c).getFirstName());
         }
     }

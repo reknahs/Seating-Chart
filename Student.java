@@ -9,7 +9,7 @@ public class Student {
     private boolean hearing; 
     private ArrayList<Student> near;
     private ArrayList<Student> avoid;
-    String id;
+    private int id;
 
     public Student (String first, String last, int grade, boolean eyesight, boolean hearing) {
         firstName = first;
@@ -56,10 +56,13 @@ public class Student {
         avoid.add(student);
     }
 
-    public void setId (String id) {
+    public void setId (int id) {
         this.id = id;
     }
 
+    public int getId () {
+        return id;
+    }
     }
 
 
