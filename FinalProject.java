@@ -1,14 +1,16 @@
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
 public class FinalProject {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         //EVERYTHIG BELOW THIS COMMENT IS TESTING
-        boolean[][] classroom = new boolean[14][14];
-        classroom[0][0] = true;
-        classroom[0][1] = true;
-        classroom[2][0] = true;
-        classroom[2][1] = true;
-        classroom[4][0] = true;
-        classroom[4][1] = true;
+        int[][] classroom = new int[14][14];
+        classroom[0][0] = 1;
+        classroom[0][1] = 1;
+        classroom[2][0] = 1;
+        classroom[2][1] = 1;
+        classroom[4][0] = 1;
+        classroom[4][1] = 1;
         ArrayList<Student> students = new ArrayList();
         students.add(new Student("Deaf1", "", 9, true, false));
         students.add(new Student("Khadija", "", 10, true, true));
@@ -22,6 +24,7 @@ public class FinalProject {
         priorities.add("Hearing");
         for(Student s: students) System.out.println(s.getFirstName());
         System.out.println();
-        SeatingChart chart = new SeatingChart(classroom, students, priorities);
+        Class a = new Class(new File("roster.txt"));
+        SeatingChart chart = new SeatingChart(classroom, a, priorities, students);
     }
 }
