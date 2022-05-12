@@ -28,7 +28,7 @@ public class Class {
         }
     }
 
-    public Student getStudent (String id) {
+    public Student getStudent (int id) {
        return students.get(id);
     }
 
@@ -47,5 +47,6 @@ public class Class {
         Class c = new Class(file);
         c.listStudents();
     }
+
 
 }
