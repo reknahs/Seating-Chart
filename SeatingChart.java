@@ -15,7 +15,22 @@ public class SeatingChart {
         // }
         this.students = TEMPORARY;
         this.priorities = priorities; 
-        Student[][] order = getBestChart();
+        getBestChart();
+        int iterator = 0;
+        for(int i = 0; i < classroom.length; i++) {
+            for(int j = 0; j < classroom[i].length; j++) {
+                if(classroom[i][j] == 1) {
+                    classroom[i][j] = this.students.get(iterator).getId();
+                }
+            }
+        }
+        // for(int[] i: classroom) {
+        //     for(int j: i) {
+        //         System.out.print(j+" ");
+        //     }
+        //     System.out.println();
+        // }
+        sort2();
     }
 
     // part of initial sorting algorithm, finds the bounds of all the current sorting 
@@ -51,7 +66,7 @@ public class SeatingChart {
     // it sorts by eyesight
     // the second and final pass results in -> {[[Lamracus(e, h)], Kyle(e)], [[Bob(h), Deandre(h)], [Khadija, Harsha, Shanker]]}
     // this one sorts by hearing
-    public Student[][] getBestChart() {
+    public void getBestChart() {
         ArrayList<Integer> indices = new ArrayList();
         for(int i = 0; i < priorities.size(); i++) {
             if(i == 0) {
@@ -73,7 +88,6 @@ public class SeatingChart {
             students = modified_students;
         }
         for(Student i: students) System.out.println(i.getFirstName());
-        return new Student[][]{};
     }
 
     // sorts a given segment of students by a certain priority, returns an arraylist of the new order
@@ -97,5 +111,8 @@ public class SeatingChart {
         }
         return newOrder;
 
+    }
+
+    public void sort2() {
     }
 }
