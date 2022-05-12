@@ -2,18 +2,42 @@ import java.util.ArrayList;
 
 public class SeatingChart {
 
-    private boolean[][] classroom; // every spot with a desk is true
-    private ArrayList<Student> students; // contains all students
+    private int[][] classroom; // every spot without desk is 0, every spot with desk is 1
     private ArrayList<String> priorities; // has priorities in order, most prioritized at the front
+    private ArrayList<Student> students; // every student
 
-    public SeatingChart(boolean[][] classroom, ArrayList<Student> students, ArrayList<String> priorities) {
+    // contructor
+    public SeatingChart(int[][] classroom, Class students, ArrayList<String> priorities, ArrayList<Student> TEMPORARY) {
         this.classroom = classroom;
-        this.students = students;
+        this.students = new ArrayList();
+        // for(int s: students.getStudentDict().keySet()) {
+        //     this.students.add(students.getStudentDict().get(s));
+        // }
+        this.students = TEMPORARY;
         this.priorities = priorities; 
-
-        Student[][] order = getBestChart();
+        getBestChart();
+        int iterator = 0;
+        for(int i = 0; i < classroom.length; i++) {
+            for(int j = 0; j < classroom[i].length; j++) {
+                if(classroom[i][j] == 1) {
+                    classroom[i][j] = this.students.get(iterator).getId();
+                }
+            }
+        }
+        // for(int[] i: classroom) {
+        //     for(int j: i) {
+        //         System.out.print(j+" ");
+        //     }
+        //     System.out.println();
+        // }
+        sort2();
     }
 
+    // part of initial sorting algorithm, finds the bounds of all the current sorting 
+    // EX: if we have finished the first priority (in this case eysight), if the current array is [bad_eye, bad_eye, good_eye]
+    // the function returns 0 2 3 
+    // because our greedy algorithm now knows it has permission to shuffle indexs 0 - 2, and 0 - 1, but it has to sort 
+    // each of those independently
     public ArrayList<Integer> getSplits(int index) {
         ArrayList<Integer> indices = new ArrayList();
         indices.add(0);
@@ -39,9 +63,10 @@ public class SeatingChart {
     // EX -> eyesight (e) first priority, hearing (h) second priority
     // if the original random order is {Bob(h), Khadija, Harsha, Shanker, Lamarcus(e, h), Deandre(h), Kyle(e)}
     // then the first pass results in -> {[Kyle(e), Lamarcus(e, h)], [Deandre(h), Shanker, Harsha, Khadija, Bob(h)]}
-    // it sorts by 
+    // it sorts by eyesight
     // the second and final pass results in -> {[[Lamracus(e, h)], Kyle(e)], [[Bob(h), Deandre(h)], [Khadija, Harsha, Shanker]]}
-    public Student[][] getBestChart() {
+    // this one sorts by hearing
+    public void getBestChart() {
         ArrayList<Integer> indices = new ArrayList();
         for(int i = 0; i < priorities.size(); i++) {
             if(i == 0) {
@@ -63,9 +88,9 @@ public class SeatingChart {
             students = modified_students;
         }
         for(Student i: students) System.out.println(i.getFirstName());
-        return new Student[][]{};
     }
 
+    // sorts a given segment of students by a certain priority, returns an arraylist of the new order
     public ArrayList<Student> sort(String priority, ArrayList<Student> segment) {
         ArrayList<Student> newOrder = new ArrayList();
         ArrayList<Student> taken = new ArrayList();
@@ -86,5 +111,8 @@ public class SeatingChart {
         }
         return newOrder;
 
+    }
+
+    public void sort2() {
     }
 }
