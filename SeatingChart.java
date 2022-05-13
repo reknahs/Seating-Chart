@@ -5,6 +5,8 @@ public class SeatingChart {
     private int[][] classroom; // every spot without desk is 0, every spot with desk is 1
     private ArrayList<String> priorities; // has priorities in order, most prioritized at the front
     private ArrayList<Student> students; // every student
+    private Class students_id; 
+    private int[][] positions;
 
     // contructor
     public SeatingChart(int[][] classroom, Class students, ArrayList<String> priorities, ArrayList<Student> TEMPORARY) {
@@ -13,24 +15,23 @@ public class SeatingChart {
         // for(int s: students.getStudentDict().keySet()) {
         //     this.students.add(students.getStudentDict().get(s));
         // }
+        this.students_id = students;
         this.students = TEMPORARY;
         this.priorities = priorities; 
         getBestChart();
         int iterator = 0;
+        this.positions = new int[this.students.size()][2];
         for(int i = 0; i < classroom.length; i++) {
             for(int j = 0; j < classroom[i].length; j++) {
-                if(classroom[i][j] == 1) {
-                    classroom[i][j] = this.students.get(iterator).getId();
+                if(this.classroom[i][j] == 1) {
+                    this.positions[iterator] = new int[]{i, j};
+                    this.classroom[i][j] = this.students.get(iterator).getId();
+                    iterator++;
                 }
             }
         }
-        // for(int[] i: classroom) {
-        //     for(int j: i) {
-        //         System.out.print(j+" ");
-        //     }
-        //     System.out.println();
-        // }
-        sort2();
+        double curr_score = mean_score(this.classroom);
+        sort2(curr_score, 0);
     }
 
     // part of initial sorting algorithm, finds the bounds of all the current sorting 
@@ -71,8 +72,6 @@ public class SeatingChart {
         for(int i = 0; i < priorities.size(); i++) {
             if(i == 0) {
                 students = sort(priorities.get(i), students);
-                for(Student s: students) System.out.println(s.getFirstName());
-                System.out.println();
                 continue;
             }
             indices = getSplits(i);
@@ -112,7 +111,89 @@ public class SeatingChart {
         return newOrder;
 
     }
+    
+    // finds the location of a student based on their id
+    public int[] getLocation(Student s) {
+        for(int i = 0; i < classroom.length; i++) {
+            for(int j = 0; j < classroom[i].length; j++) {
+                if(classroom[i][j] == s.getId()) return new int[]{i, j};
+            }
+        }
+        return new int[]{0, 0};
+    }
 
-    public void sort2() {
+    // calculates a "score" for a seating arrangment based on all of the student attributes + the prioritization of the attributes
+    public double mean_score(int[][] room) {
+        double total_score = 0; 
+        for(int i = 0; i < room.length; i++) {
+            for(int j = 0; j < room[i].length; j++) {
+                if(room[i][j] == 0) continue;
+                double score = 0;
+                for(int p = 0; p < priorities.size(); p++) {
+                    double priority_weight = Math.abs(priorities.size()-(p+1))*0.1;
+                    if(priorities.get(p).equals("Eyesight")) {
+                        score += priority_weight*(room.length-i);
+                    }
+                    else if(priorities.get(p).equals("Hearing")) {
+                        score += priority_weight*(room.length-i);
+                    }
+                    else if(priorities.get(p).equals("Near")) {
+                        Student student = students_id.getStudent(room[i][j]);
+                        double total_distance = 0;
+                        for(Student s: student.getNear()) {
+                            int[] index = getLocation(s);
+                            double distance = Math.sqrt(Math.pow(i-index[0], 2)+Math.pow(j-index[1], 2));
+                            total_distance += distance;
+                        }
+                        double mean_distance = total_distance/student.getNear().size();
+                        score -= priority_weight*mean_distance;
+                    }
+                    else if(priorities.get(p).equals("Avoid")) {
+                        Student student = students_id.getStudent(room[i][j]);
+                        double total_distance = 0;
+                        for(Student s: student.getNear()) {
+                            int[] index = getLocation(s);
+                            double distance = Math.sqrt(Math.pow(i-index[0], 2)+Math.pow(j-index[1], 2));
+                            total_distance += distance;
+                        }
+                        double mean_distance = total_distance/student.getNear().size();
+                        score += priority_weight*mean_distance;
+                    }
+                }
+                //System.out.println(score);
+                total_score += score;            
+            }
+        }
+
+        double mean_score = total_score/students.size();
+        return mean_score;
+    }
+
+    public void sort2(double current_mean_score, int stopper) {
+        System.out.println(stopper);
+        if(stopper == 1000000) return;
+        for(int i = 0; i < positions.length; i++) {
+            for(int j = 0; j < positions.length; j++) {
+                if(i == j) continue;
+                int[][] temp_classroom = new int[14][14];
+                for(int k = 0; k < 14; k++) {
+                    for(int l = 0; l < 14; l++) {
+                        temp_classroom[k][l] = classroom[k][l];
+                    }
+                }
+                int one = classroom[positions[i][0]][positions[i][1]];
+                int two = classroom[positions[j][0]][positions[j][1]];
+                temp_classroom[positions[i][0]][positions[i][1]] = two;
+                temp_classroom[positions[j][0]][positions[j][1]] = one;
+                System.out.println(temp_classroom[0][0]+" "+temp_classroom[0][1]);
+                System.out.println(classroom[0][0]+" "+classroom[0][1]);
+                double new_score = mean_score(temp_classroom);
+                System.out.println(new_score+" "+current_mean_score);
+                if(new_score > current_mean_score) {
+                    this.classroom = temp_classroom;
+                    sort2(new_score, stopper+1);
+                }
+            }
+        }
     }
 }
