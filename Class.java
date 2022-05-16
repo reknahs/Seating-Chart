@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Class {
 
-    private Hashtable< Integer, Student> students = new Hashtable< Integer, Student>();
+    public Hashtable< Integer, Student> students = new Hashtable< Integer, Student>();
     private Set<Integer> setOfKeys = students.keySet();
 
 

@@ -7,8 +7,8 @@ public class Student {
     private int grade;
     private boolean eyesight;
     private boolean hearing; 
-    private ArrayList<Student> near;
-    private ArrayList<Student> avoid;
+    private ArrayList<Student> near = new ArrayList();
+    private ArrayList<Student> avoid = new ArrayList();
     private int id;
 
     public Student (String first, String last, int grade, boolean eyesight, boolean hearing) {

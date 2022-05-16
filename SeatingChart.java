@@ -32,6 +32,12 @@ public class SeatingChart {
         }
         double curr_score = mean_score(this.classroom);
         sort2(curr_score, 0);
+        for(int[] i: classroom) {
+            for(int j: i) {
+                System.out.print(j+" ");
+            }
+            System.out.println();
+        }
     }
 
     // part of initial sorting algorithm, finds the bounds of all the current sorting 
@@ -125,19 +131,23 @@ public class SeatingChart {
     // calculates a "score" for a seating arrangment based on all of the student attributes + the prioritization of the attributes
     public double mean_score(int[][] room) {
         double total_score = 0; 
+        int conditioned_students = 0;
         for(int i = 0; i < room.length; i++) {
             for(int j = 0; j < room[i].length; j++) {
                 if(room[i][j] == 0) continue;
                 double score = 0;
+                boolean hasCondition = false;
                 for(int p = 0; p < priorities.size(); p++) {
-                    double priority_weight = Math.abs(priorities.size()-(p+1))*0.1;
-                    if(priorities.get(p).equals("Eyesight")) {
+                    double priority_weight = Math.abs(priorities.size()+1-(p+1))*10;
+                    if(priorities.get(p).equals("Eyesight") && !students_id.getStudent(room[i][j]).getEyesight()) {
                         score += priority_weight*(room.length-i);
+                        hasCondition = true;
                     }
-                    else if(priorities.get(p).equals("Hearing")) {
+                    else if(priorities.get(p).equals("Hearing") && !students_id.getStudent(room[i][j]).getHearing()) {
                         score += priority_weight*(room.length-i);
+                        hasCondition = true;
                     }
-                    else if(priorities.get(p).equals("Near")) {
+                    else if(priorities.get(p).equals("Near") && students_id.getStudent(room[i][j]).getNear().size() == 0) {
                         Student student = students_id.getStudent(room[i][j]);
                         double total_distance = 0;
                         for(Student s: student.getNear()) {
@@ -147,30 +157,33 @@ public class SeatingChart {
                         }
                         double mean_distance = total_distance/student.getNear().size();
                         score -= priority_weight*mean_distance;
+                        hasCondition = true;
                     }
-                    else if(priorities.get(p).equals("Avoid")) {
+                    else if(priorities.get(p).equals("Avoid") && students_id.getStudent(room[i][j]).getAvoid().size() != 0) {
                         Student student = students_id.getStudent(room[i][j]);
                         double total_distance = 0;
-                        for(Student s: student.getNear()) {
+                        for(Student s: student.getAvoid()) {
                             int[] index = getLocation(s);
                             double distance = Math.sqrt(Math.pow(i-index[0], 2)+Math.pow(j-index[1], 2));
                             total_distance += distance;
                         }
-                        double mean_distance = total_distance/student.getNear().size();
+                        double mean_distance = total_distance/student.getAvoid().size();
                         score += priority_weight*mean_distance;
                     }
                 }
-                //System.out.println(score);
-                total_score += score;            
+                if(hasCondition) {
+                    conditioned_students++;
+                    total_score += score;
+                }
             }
         }
-
-        double mean_score = total_score/students.size();
+        double mean_score = total_score/conditioned_students;
         return mean_score;
     }
 
+    //2nd sorting algorithm which refines the seating chart made by the greedy algorithm
+    //takes inspiration from Stochastic Gradient Descent
     public void sort2(double current_mean_score, int stopper) {
-        System.out.println(stopper);
         if(stopper == 1000000) return;
         for(int i = 0; i < positions.length; i++) {
             for(int j = 0; j < positions.length; j++) {
@@ -185,11 +198,9 @@ public class SeatingChart {
                 int two = classroom[positions[j][0]][positions[j][1]];
                 temp_classroom[positions[i][0]][positions[i][1]] = two;
                 temp_classroom[positions[j][0]][positions[j][1]] = one;
-                System.out.println(temp_classroom[0][0]+" "+temp_classroom[0][1]);
-                System.out.println(classroom[0][0]+" "+classroom[0][1]);
                 double new_score = mean_score(temp_classroom);
-                System.out.println(new_score+" "+current_mean_score);
                 if(new_score > current_mean_score) {
+                    System.out.println(new_score+" "+current_mean_score);
                     this.classroom = temp_classroom;
                     sort2(new_score, stopper+1);
                 }
