@@ -41,8 +41,6 @@ public class FinalProject {
         students.add(one); students.add(two); students.add(three); students.add(four); students.add(five); students.add(six);
         students.add(seven); students.add(eight);
         ArrayList<String> priorities = new ArrayList();
-        priorities.add("Eyesight");
-        priorities.add("Hearing");
         priorities.add("Avoid");
         SeatingChart chart = new SeatingChart(classroom, a, priorities, students);
     }

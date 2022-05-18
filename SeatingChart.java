@@ -1,3 +1,9 @@
+//TODO: 
+//check functionality of near and avoid checks 
+//test on larger class
+//make sure weights for priorities are fine
+//note -> test with large classes with not too much people with constraints, to simulate real life
+
 import java.util.ArrayList;
 
 public class SeatingChart {
@@ -38,7 +44,7 @@ public class SeatingChart {
             System.out.println();
         }
         sort2(curr_score, 0);
-        for(int[] i: classroom) {
+        for(int[] i: this.classroom) {
             for(int j: i) {
                 System.out.print(j+" ");
             }
@@ -206,14 +212,7 @@ public class SeatingChart {
                 temp_classroom[positions[j][0]][positions[j][1]] = one;
                 double new_score = mean_score(temp_classroom);
                 if(new_score > current_mean_score) {
-                    for(int[] I: temp_classroom) {
-                        for(int J: I) {
-                            System.out.print(J+" ");
-                        }
-                        System.out.println();
-                    }
-                    this.classroom = temp_classroom;
-                    
+                    classroom = temp_classroom;
                     System.out.println();
                     System.out.println(current_mean_score);
                     current_mean_score = new_score;
@@ -224,6 +223,6 @@ public class SeatingChart {
                 if(leave) break;
             }
             if(leave) break;
-        }
+        } 
     }
 }
