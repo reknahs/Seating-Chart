@@ -44,8 +44,6 @@ public class FinalProject {
         priorities.add("Eyesight");
         priorities.add("Hearing");
         priorities.add("Avoid");
-        for(Student s: students) System.out.println(s.getFirstName());
-        System.out.println();
         SeatingChart chart = new SeatingChart(classroom, a, priorities, students);
     }
 }

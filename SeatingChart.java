@@ -31,6 +31,12 @@ public class SeatingChart {
             }
         }
         double curr_score = mean_score(this.classroom);
+        for(int[] i: classroom) {
+            for(int j: i) {
+                System.out.print(j+" ");
+            }
+            System.out.println();
+        }
         sort2(curr_score, 0);
         for(int[] i: classroom) {
             for(int j: i) {
@@ -92,7 +98,6 @@ public class SeatingChart {
             }
             students = modified_students;
         }
-        for(Student i: students) System.out.println(i.getFirstName());
     }
 
     // sorts a given segment of students by a certain priority, returns an arraylist of the new order
@@ -182,9 +187,10 @@ public class SeatingChart {
     }
 
     //2nd sorting algorithm which refines the seating chart made by the greedy algorithm
-    //takes inspiration from Stochastic Gradient Descent
+    //crude rendition of Stochastic Gradient Descent
     public void sort2(double current_mean_score, int stopper) {
         if(stopper == 1000000) return;
+        boolean leave = false;
         for(int i = 0; i < positions.length; i++) {
             for(int j = 0; j < positions.length; j++) {
                 if(i == j) continue;
@@ -200,11 +206,24 @@ public class SeatingChart {
                 temp_classroom[positions[j][0]][positions[j][1]] = one;
                 double new_score = mean_score(temp_classroom);
                 if(new_score > current_mean_score) {
-                    System.out.println(new_score+" "+current_mean_score);
+                    for(int[] I: temp_classroom) {
+                        for(int J: I) {
+                            System.out.print(J+" ");
+                        }
+                        System.out.println();
+                    }
                     this.classroom = temp_classroom;
-                    sort2(new_score, stopper+1);
+                    
+                    System.out.println();
+                    System.out.println(current_mean_score);
+                    current_mean_score = new_score;
+                    System.out.println(current_mean_score);
+                    leave = true;
+                    sort2(current_mean_score, stopper+1);
                 }
+                if(leave) break;
             }
+            if(leave) break;
         }
     }
 }
