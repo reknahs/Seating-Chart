@@ -1,3 +1,4 @@
+package SeatingChart.src;
 //TODO: 
 //check functionality of near and avoid checks 
 //test on larger class

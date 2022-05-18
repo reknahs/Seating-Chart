@@ -1,4 +1,8 @@
+package SeatingChart.src;
 import java.util.ArrayList;
+
+import SeatingChart.src.Class;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 public class FinalProject {
