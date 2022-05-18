@@ -181,6 +181,7 @@ public class SeatingChart {
                         }
                         double mean_distance = total_distance/student.getAvoid().size();
                         score += priority_weight*mean_distance;
+                        System.out.println(priority_weight*mean_distance);
                     }
                 }
                 if(hasCondition) {
