@@ -1,4 +1,3 @@
-package SeatingChart.src;
 //TODO: 
 //check functionality of near and avoid checks 
 //test on larger class
@@ -181,7 +180,6 @@ public class SeatingChart {
                         }
                         double mean_distance = total_distance/student.getAvoid().size();
                         score += priority_weight*mean_distance;
-                        System.out.println(priority_weight*mean_distance);
                     }
                 }
                 if(hasCondition) {
