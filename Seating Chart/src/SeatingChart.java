@@ -37,6 +37,7 @@ public class SeatingChart {
             }
         }
         double curr_score = mean_score(this.classroom);
+        
         for(int[] i: classroom) {
             for(int j: i) {
                 System.out.print(j+" ");
@@ -180,6 +181,7 @@ public class SeatingChart {
                         }
                         double mean_distance = total_distance/student.getAvoid().size();
                         score += priority_weight*mean_distance;
+                        hasCondition = true;
                     }
                 }
                 if(hasCondition) {
@@ -213,10 +215,7 @@ public class SeatingChart {
                 double new_score = mean_score(temp_classroom);
                 if(new_score > current_mean_score) {
                     classroom = temp_classroom;
-                    System.out.println();
-                    System.out.println(current_mean_score);
                     current_mean_score = new_score;
-                    System.out.println(current_mean_score);
                     leave = true;
                     sort2(current_mean_score, stopper+1);
                 }

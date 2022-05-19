@@ -32,10 +32,10 @@ public class FinalProject {
         Student eight = new Student("Blind", "", 10, false, true);   
         eight.setId(8);a.students.put(8, eight);
         one.setAvoid(two);
-        one.setAvoid(three);
+        two.setAvoid(one);
         three.setAvoid(four);
         five.setAvoid(four);
-        four.setAvoid(five);
+        four.setAvoid(three);
         six.setAvoid(eight);
         eight.setAvoid(six);
         students.add(one); students.add(two); students.add(three); students.add(four); students.add(five); students.add(six);
