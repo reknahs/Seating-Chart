@@ -202,6 +202,13 @@ public class SeatingChart {
     //2nd sorting algorithm which refines the seating chart made by the greedy algorithm
     //crude rendition of Stochastic Gradient Descent
     public void sort2(double current_best_score, int stopper) {
+        int time = 0;
+        int limit = 100000;
+        double temperature = 1000000;
+        while(time < limit) {
+            temperature *= 0.99999;
+
+        }
         // if(stopper == 100000) return;
         // boolean leave = false;
         // for(int i = 0; i < positions.length; i++) {
@@ -228,10 +235,5 @@ public class SeatingChart {
         //     }
         //     if(leave) break;
         // } 
-        if(true) 
-            System.out.println("im wrong");
-        else 
-            System.out.println("lol");
-            System.out.println("?");
     }
 }
