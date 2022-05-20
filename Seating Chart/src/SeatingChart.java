@@ -4,14 +4,13 @@
 //make sure weights for priorities are fine
 //note -> test with large classes with not too much people with constraints, to simulate real life
 
-import java.util.Map;
-import java.util.HashMap;
+import java.util.Random;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 
 public class SeatingChart {
 
     private int[][] classroom; // every spot without desk is 0, every spot with desk is 1
+    private int[][] current_state; // used as the current evolutionary marker for the simulated annealing algorithm
     private ArrayList<String> priorities; // has priorities in order, most prioritized at the front
     private ArrayList<Student> students; // every student
     private Class students_id; 
@@ -30,11 +29,13 @@ public class SeatingChart {
         getBestChart();
         int iterator = 0;
         this.positions = new int[this.students.size()][2];
+        this.current_state = new int[14][14];
         for(int i = 0; i < classroom.length; i++) {
             for(int j = 0; j < classroom[i].length; j++) {
                 if(this.classroom[i][j] == 1) {
                     this.positions[iterator] = new int[]{i, j};
                     this.classroom[i][j] = this.students.get(iterator).getId();
+                    this.current_state[i][j] = this.classroom[i][j];
                     iterator++;
                 }
             }
@@ -49,7 +50,7 @@ public class SeatingChart {
             }
             System.out.println();
         }
-        sort2(curr_score, 0);
+        sort2(curr_score);
         for(int[] i: this.classroom) {
             for(int j: i) {
                 System.out.print(j+" ");
@@ -199,15 +200,61 @@ public class SeatingChart {
         return mean_score;
     }
 
+    // gets random neighbor of current classroom
+    // "neighbor" -> current classroom with any two people swapped
+    public int[][] getNeighbor() {
+        Random random = new Random();
+        int i1 = random.nextInt(14);
+        int i2 = random.nextInt(14);
+        int j1 = random.nextInt(14);
+        int j2 = random.nextInt(14);
+        while(classroom[i1][i2] == 0 || classroom[j1][j2] == 0 || (i1 == j1 && i2 == j2)) {
+            i1 = random.nextInt(14);
+            i2 = random.nextInt(14);
+            j1 = random.nextInt(14);
+            j2 = random.nextInt(14);            
+        }
+        int[][] new_room = new int[14][14];
+        for(int i = 0; i < 14; i++) {
+            for(int j = 0; j < 14; j++) {
+                new_room[i][j] = classroom[i][j];
+            }
+        }
+
+        new_room[i1][i2] = classroom[j1][j2];
+        new_room[j1][j2] = classroom[i1][i2];
+
+        return new_room;
+    }
+
+    // Acceptance Probability Function of the Metropolis-Hastings Algorithm
+    public double P(double state_score, double neighbor_score, double temp) {
+        if(neighbor_score > state_score) {
+            return 1.0;
+        }
+        return Math.exp((state_score-neighbor_score)/temp);
+    }
+
     //2nd sorting algorithm which refines the seating chart made by the greedy algorithm
     //crude rendition of Stochastic Gradient Descent
-    public void sort2(double current_best_score, int stopper) {
+    public void sort2(double current_best_score) {
         int time = 0;
         int limit = 100000;
+        double current_state_score = current_best_score;
         double temperature = 1000000;
         while(time < limit) {
+            int[][] next = getNeighbor();
+            double next_score = mean_score(next);
+            if(current_state_score > current_best_score) {
+                classroom = next;
+            }
+            if(P(current_state_score, next_score, temperature) >= Math.random()) {
+                current_state = next;
+                current_state_score = next_score;
+            }
             temperature *= 0.99999;
-
+            time++;
+            //System.out.println(time);
         }
         // if(stopper == 100000) return;
         // boolean leave = false;
