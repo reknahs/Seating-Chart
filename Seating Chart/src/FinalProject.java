@@ -31,10 +31,7 @@ public class FinalProject {
         seven.setId(7);a.students.put(7, seven);
         Student eight = new Student("Blind", "", 10, false, true);   
         eight.setId(8);a.students.put(8, eight);
-        one.setAvoid(two);
-        two.setAvoid(one);
         three.setAvoid(four);
-        five.setAvoid(four);
         four.setAvoid(three);
         six.setAvoid(eight);
         eight.setAvoid(six);
@@ -42,6 +39,8 @@ public class FinalProject {
         students.add(seven); students.add(eight);
         ArrayList<String> priorities = new ArrayList();
         priorities.add("Avoid");
+        priorities.add("Eyesight");
+        priorities.add("Hearing");
         SeatingChart chart = new SeatingChart(classroom, a, priorities, students);
     }
 }

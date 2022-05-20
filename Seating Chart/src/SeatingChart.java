@@ -4,7 +4,10 @@
 //make sure weights for priorities are fine
 //note -> test with large classes with not too much people with constraints, to simulate real life
 
+import java.util.Map;
+import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class SeatingChart {
 
@@ -36,7 +39,9 @@ public class SeatingChart {
                 }
             }
         }
-        double curr_score = mean_score(this.classroom);
+
+        double curr_score = mean_score(this.classroom);;
+
         
         for(int[] i: classroom) {
             for(int j: i) {
@@ -196,32 +201,37 @@ public class SeatingChart {
 
     //2nd sorting algorithm which refines the seating chart made by the greedy algorithm
     //crude rendition of Stochastic Gradient Descent
-    public void sort2(double current_mean_score, int stopper) {
-        if(stopper == 1000000) return;
-        boolean leave = false;
-        for(int i = 0; i < positions.length; i++) {
-            for(int j = 0; j < positions.length; j++) {
-                if(i == j) continue;
-                int[][] temp_classroom = new int[14][14];
-                for(int k = 0; k < 14; k++) {
-                    for(int l = 0; l < 14; l++) {
-                        temp_classroom[k][l] = classroom[k][l];
-                    }
-                }
-                int one = classroom[positions[i][0]][positions[i][1]];
-                int two = classroom[positions[j][0]][positions[j][1]];
-                temp_classroom[positions[i][0]][positions[i][1]] = two;
-                temp_classroom[positions[j][0]][positions[j][1]] = one;
-                double new_score = mean_score(temp_classroom);
-                if(new_score > current_mean_score) {
-                    classroom = temp_classroom;
-                    current_mean_score = new_score;
-                    leave = true;
-                    sort2(current_mean_score, stopper+1);
-                }
-                if(leave) break;
-            }
-            if(leave) break;
-        } 
+    public void sort2(double current_best_score, int stopper) {
+        // if(stopper == 100000) return;
+        // boolean leave = false;
+        // for(int i = 0; i < positions.length; i++) {
+        //     for(int j = 0; j < positions.length; j++) {
+        //         if(i == j) continue;
+        //         int[][] temp_classroom = new int[14][14];
+        //         for(int k = 0; k < 14; k++) {
+        //             for(int l = 0; l < 14; l++) {
+        //                 temp_classroom[k][l] = classroom[k][l];
+        //             }
+        //         }
+        //         int one = classroom[positions[i][0]][positions[i][1]];
+        //         int two = classroom[positions[j][0]][positions[j][1]];
+        //         temp_classroom[positions[i][0]][positions[i][1]] = two;
+        //         temp_classroom[positions[j][0]][positions[j][1]] = one;
+        //         double new_score = mean_score(temp_classroom);
+        //         if(new_score > current_mean_score) {
+        //             classroom = temp_classroom;
+        //             current_mean_score = new_score;
+        //             leave = true;
+        //             sort2(current_mean_score, stopper+1);
+        //         }
+        //         if(leave) break;
+        //     }
+        //     if(leave) break;
+        // } 
+        if(true) 
+            System.out.println("im wrong");
+        else 
+            System.out.println("lol");
+            System.out.println("?");
     }
 }
