@@ -246,6 +246,7 @@ public class SeatingChart {
             int[][] next = getNeighbor();
             double next_score = mean_score(next);
             if(current_state_score > current_best_score) {
+                current_best_score = next_score;
                 classroom = next;
             }
             if(P(current_state_score, next_score, temperature) >= Math.random()) {
