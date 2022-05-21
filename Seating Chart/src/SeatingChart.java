@@ -234,32 +234,8 @@ public class SeatingChart {
     }
 
     //2nd sorting algorithm which refines the seating chart made by the greedy algorithm
-    //crude rendition of Stochastic Gradient Descent
+    //implementation of Simulated Annealing algorithm
     public void sort2(double current_best_score) {
-        //Part 3
-        // int time = 0;
-        // int limit = 1000000;
-        // double current_state_score = current_best_score;
-        // double temperature = 100000000;
-        // while(time < limit) {
-        //     int[][] next = getNeighbor();
-        //     double next_score = mean_score(next);
-        //     double cost = next_score-current_best_score;
-        //     if(cost >= 0) {
-        //         current_best_score = next_score;
-        //         classroom = next;
-        //     }
-        //     else {
-        //         System.out.println(Math.exp(cost/temperature)>Math.random());
-        //         if(Math.exp(cost/temperature) > Math.random()) {
-        //             current_state_score = next_score;
-        //             current_state = next;
-        //         }
-        //     }
-        //     temperature *= 0.99998;
-        //     time++;
-        // }
-        //Part 2
         int time = 0;
         int limit = 1000000;
         double current_state_score = current_best_score;
