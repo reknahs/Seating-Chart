@@ -87,8 +87,8 @@ public class FinalProject {
         eighteen.setAvoid(twelve);
         three.setNear(twentyone);
         twentyone.setNear(three);
-        twentythree.setNear(seven);
-        seven.setNear(twentythree);
+        twenty.setNear(twentythree);
+        twentythree.setNear(twenty);
         students.add(one); students.add(two); students.add(three); students.add(four); students.add(five); students.add(six);
         students.add(seven); students.add(eight); 
         students.add(nine); students.add(ten); students.add(eleven); students.add(twelve); students.add(thirteen); students.add(fourteen);

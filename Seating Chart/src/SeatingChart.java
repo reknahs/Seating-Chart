@@ -137,10 +137,10 @@ public class SeatingChart {
     }
     
     // finds the location of a student based on their id
-    public int[] getLocation(Student s) {
-        for(int i = 0; i < classroom.length; i++) {
-            for(int j = 0; j < classroom[i].length; j++) {
-                if(classroom[i][j] == s.getId()) return new int[]{i, j};
+    public int[] getLocation(Student s, int[][] current_room) {
+        for(int i = 0; i < current_room.length; i++) {
+            for(int j = 0; j < current_room[i].length; j++) {
+                if(current_room[i][j] == s.getId()) return new int[]{i, j};
             }
         }
         return new int[]{0, 0};
@@ -156,7 +156,7 @@ public class SeatingChart {
                 double score = 0;
                 boolean hasCondition = false;
                 for(int p = 0; p < priorities.size(); p++) {
-                    double priority_weight = Math.abs(priorities.size()+1-(p+1))*10;
+                    double priority_weight = Math.abs(priorities.size()-p)*10;
                     if(priorities.get(p).equals("Eyesight") && !students_id.getStudent(room[i][j]).getEyesight()) {
                         score += priority_weight*(room.length-i);
                         hasCondition = true;
@@ -165,11 +165,11 @@ public class SeatingChart {
                         score += priority_weight*(room.length-i);
                         hasCondition = true;
                     }
-                    else if(priorities.get(p).equals("Near") && students_id.getStudent(room[i][j]).getNear().size() == 0) {
+                    else if(priorities.get(p).equals("Near") && students_id.getStudent(room[i][j]).getNear().size() != 0) {
                         Student student = students_id.getStudent(room[i][j]);
                         double total_distance = 0;
                         for(Student s: student.getNear()) {
-                            int[] index = getLocation(s);
+                            int[] index = getLocation(s, room);
                             double distance = Math.sqrt(Math.pow(i-index[0], 2)+Math.pow(j-index[1], 2));
                             total_distance += distance;
                         }
@@ -181,7 +181,7 @@ public class SeatingChart {
                         Student student = students_id.getStudent(room[i][j]);
                         double total_distance = 0;
                         for(Student s: student.getAvoid()) {
-                            int[] index = getLocation(s);
+                            int[] index = getLocation(s, room);
                             double distance = Math.sqrt(Math.pow(i-index[0], 2)+Math.pow(j-index[1], 2));
                             total_distance += distance;
                         }
@@ -208,7 +208,7 @@ public class SeatingChart {
         int i2 = random.nextInt(14);
         int j1 = random.nextInt(14);
         int j2 = random.nextInt(14);
-        while(classroom[i1][i2] == 0 || classroom[j1][j2] == 0 || (i1 == j1 && i2 == j2)) {
+        while(current_state[i1][i2] == 0 || current_state[j1][j2] == 0 || (i1 == j1 && i2 == j2)) {
             i1 = random.nextInt(14);
             i2 = random.nextInt(14);
             j1 = random.nextInt(14);
@@ -217,71 +217,74 @@ public class SeatingChart {
         int[][] new_room = new int[14][14];
         for(int i = 0; i < 14; i++) {
             for(int j = 0; j < 14; j++) {
-                new_room[i][j] = classroom[i][j];
+                new_room[i][j] = current_state[i][j];
             }
         }
 
-        new_room[i1][i2] = classroom[j1][j2];
-        new_room[j1][j2] = classroom[i1][i2];
+        new_room[i1][i2] = current_state[j1][j2];
+        new_room[j1][j2] = current_state[i1][i2];
 
         return new_room;
     }
 
     // Acceptance Probability Function of the Metropolis-Hastings Algorithm
     public double P(double state_score, double neighbor_score, double temp) {
-        if(neighbor_score > state_score) {
-            return 1.0;
-        }
-        return Math.exp((state_score-neighbor_score)/temp);
+        if(neighbor_score >= state_score) return 1.0;
+        return Math.exp((neighbor_score-state_score)/temp);
     }
 
     //2nd sorting algorithm which refines the seating chart made by the greedy algorithm
     //crude rendition of Stochastic Gradient Descent
     public void sort2(double current_best_score) {
+        //Part 3
+        // int time = 0;
+        // int limit = 1000000;
+        // double current_state_score = current_best_score;
+        // double temperature = 100000000;
+        // while(time < limit) {
+        //     int[][] next = getNeighbor();
+        //     double next_score = mean_score(next);
+        //     double cost = next_score-current_best_score;
+        //     if(cost >= 0) {
+        //         current_best_score = next_score;
+        //         classroom = next;
+        //     }
+        //     else {
+        //         System.out.println(Math.exp(cost/temperature)>Math.random());
+        //         if(Math.exp(cost/temperature) > Math.random()) {
+        //             current_state_score = next_score;
+        //             current_state = next;
+        //         }
+        //     }
+        //     temperature *= 0.99998;
+        //     time++;
+        // }
+        //Part 2
         int time = 0;
-        int limit = 100000;
+        int limit = 1000000;
         double current_state_score = current_best_score;
-        double temperature = 1000000;
+        double temperature = 100000000;
         while(time < limit) {
             int[][] next = getNeighbor();
             double next_score = mean_score(next);
             if(current_state_score > current_best_score) {
-                current_best_score = next_score;
-                classroom = next;
+                current_best_score = current_state_score;
+                for(int i = 0; i < next.length; i++) {
+                    for(int j = 0; j < next[i].length; j++) {
+                        classroom[i][j] = next[i][j];
+                    }
+                }
             }
             if(P(current_state_score, next_score, temperature) >= Math.random()) {
-                current_state = next;
+                for(int i = 0; i < next.length; i++) {
+                    for(int j = 0; j < next[i].length; j++) {
+                        current_state[i][j] = next[i][j];
+                    }
+                }                
                 current_state_score = next_score;
             }
-            temperature *= 0.99999;
+            temperature *= 0.99998;
             time++;
-            //System.out.println(time);
         }
-        // if(stopper == 100000) return;
-        // boolean leave = false;
-        // for(int i = 0; i < positions.length; i++) {
-        //     for(int j = 0; j < positions.length; j++) {
-        //         if(i == j) continue;
-        //         int[][] temp_classroom = new int[14][14];
-        //         for(int k = 0; k < 14; k++) {
-        //             for(int l = 0; l < 14; l++) {
-        //                 temp_classroom[k][l] = classroom[k][l];
-        //             }
-        //         }
-        //         int one = classroom[positions[i][0]][positions[i][1]];
-        //         int two = classroom[positions[j][0]][positions[j][1]];
-        //         temp_classroom[positions[i][0]][positions[i][1]] = two;
-        //         temp_classroom[positions[j][0]][positions[j][1]] = one;
-        //         double new_score = mean_score(temp_classroom);
-        //         if(new_score > current_mean_score) {
-        //             classroom = temp_classroom;
-        //             current_mean_score = new_score;
-        //             leave = true;
-        //             sort2(current_mean_score, stopper+1);
-        //         }
-        //         if(leave) break;
-        //     }
-        //     if(leave) break;
-        // } 
     }
 }
