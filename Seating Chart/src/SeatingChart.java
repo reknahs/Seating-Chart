@@ -41,7 +41,7 @@ public class SeatingChart {
             }
         }
 
-        double curr_score = mean_score(this.classroom);;
+        double curr_score = mean_score(this.classroom);
 
         
         for(int[] i: classroom) {
@@ -251,6 +251,8 @@ public class SeatingChart {
                     }
                 }
             }
+            mean_score(classroom);
+
             if(P(current_state_score, next_score, temperature) >= Math.random()) {
                 for(int i = 0; i < next.length; i++) {
                     for(int j = 0; j < next[i].length; j++) {
