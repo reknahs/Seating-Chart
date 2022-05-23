@@ -98,8 +98,8 @@ public class FinalProject {
         ArrayList<String> priorities = new ArrayList();
         priorities.add("Eyesight");
         priorities.add("Hearing");
-        priorities.add("Avoid");
         priorities.add("Near");
+        priorities.add("Avoid");
         SeatingChart chart = new SeatingChart(classroom, a, priorities, students);
     }
 }
