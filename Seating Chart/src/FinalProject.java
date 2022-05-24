@@ -1,9 +1,20 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
-public class FinalProject {
-    public static void main(String[] args) throws FileNotFoundException {
-        //EVERYTHIG BELOW THIS COMMENT IS TESTING
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+
+public class FinalProject extends Application{
+
+    private static Scanner scan = new Scanner(System.in);
+
+    
+    public static SeatingChart testing () throws FileNotFoundException {
         int[][] classroom = new int[14][14];
         classroom[0][0] = 1;
         classroom[0][1] = 1;
@@ -29,7 +40,7 @@ public class FinalProject {
         classroom[6][5] = 1;
         classroom[6][8] = 1;
         classroom[6][9] = 1;
-        Class a = new Class(new File("roster.txt"));
+        Course a = new Course(new File("roster.txt"));
         ArrayList<Student> students = new ArrayList();
         Student one = new Student("Stephen", "", 9, true, true);
         one.setId(1); a.students.put(1, one);
@@ -100,6 +111,43 @@ public class FinalProject {
         priorities.add("Hearing");
         priorities.add("Near");
         priorities.add("Avoid");
-        SeatingChart chart = new SeatingChart(classroom, a, priorities, students);
+        return new SeatingChart(classroom, a, priorities, students);
+    }
+    
+    public static void main(String[] args) throws FileNotFoundException {
+        System.out.println("1 for testing, 2 for with gui, 3 for without");
+        int response = scan.nextInt();
+        switch (response) {
+            case 1:
+            testing();
+            break;
+            case 2:
+            //make sure to update launch.json to run finalProject, not gui
+            //controller.java holds actual code then for handling user input after that
+            launch(args);
+            break;
+            case 3:
+            backupPlan();
+            break;
+
+        }
+        
+    }
+
+
+    public static void backupPlan () throws FileNotFoundException {
+        System.out.println("Enter pathname for roster file");
+        File file = new File(scan.nextLine());
+        Course course = new Course(file);
+        
+    }
+
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
+        primaryStage.setTitle("Seating Chart");
+        primaryStage.setScene(new Scene(root, 400, 300));
+        primaryStage.show();        
     }
 }
