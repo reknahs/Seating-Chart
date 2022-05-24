@@ -1,9 +1,3 @@
-//TODO: 
-//check functionality of near and avoid checks 
-//test on larger class
-//make sure weights for priorities are fine
-//note -> test with large classes with not too much people with constraints, to simulate real life
-
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -13,10 +7,10 @@ public class SeatingChart {
     private int[][] current_state; // used as the current evolutionary marker for the simulated annealing algorithm
     private ArrayList<String> priorities; // has priorities in order, most prioritized at the front
     private ArrayList<Student> students; // every student
-    private Class students_id; 
-    private int[][] positions;
+    private Class students_id; // gets Student object based on student id
 
     // contructor
+    // calls each of the sorting algorithms
     public SeatingChart(int[][] classroom, Class students, ArrayList<String> priorities, ArrayList<Student> TEMPORARY) {
         this.classroom = classroom;
         this.students = new ArrayList();
@@ -28,12 +22,10 @@ public class SeatingChart {
         this.priorities = priorities; 
         getBestChart();
         int iterator = 0;
-        this.positions = new int[this.students.size()][2];
         this.current_state = new int[14][14];
         for(int i = 0; i < classroom.length; i++) {
             for(int j = 0; j < classroom[i].length; j++) {
                 if(this.classroom[i][j] == 1) {
-                    this.positions[iterator] = new int[]{i, j};
                     this.classroom[i][j] = this.students.get(iterator).getId();
                     this.current_state[i][j] = this.classroom[i][j];
                     iterator++;
@@ -41,7 +33,7 @@ public class SeatingChart {
             }
         }
 
-        double curr_score = mean_score(this.classroom);;
+        double curr_score = mean_score(this.classroom);
 
         
         for(int[] i: classroom) {
@@ -57,6 +49,11 @@ public class SeatingChart {
             }
             System.out.println();
         }
+    }
+
+    // returns sorted classroom after SeatingChart object declared
+    public int[][] getClassroom() {
+        return classroom;
     }
 
     // part of initial sorting algorithm, finds the bounds of all the current sorting 
@@ -136,7 +133,7 @@ public class SeatingChart {
 
     }
     
-    // finds the location of a student based on their id
+    // finds the location of a student in a specified classroom array based on their id
     public int[] getLocation(Student s, int[][] current_room) {
         for(int i = 0; i < current_room.length; i++) {
             for(int j = 0; j < current_room[i].length; j++) {
@@ -147,6 +144,7 @@ public class SeatingChart {
     }
 
     // calculates a "score" for a seating arrangment based on all of the student attributes + the prioritization of the attributes
+    //our simulated annealing algorithm's goal is to minimize the score of this score, by changing the classroom array in certain ways
     public double mean_score(int[][] room) {
         double total_score = 0; 
         int conditioned_students = 0;
@@ -201,7 +199,8 @@ public class SeatingChart {
     }
 
     // gets random neighbor of current classroom
-    // "neighbor" -> current classroom with any two people swapped
+    // "neighbor" -> current state with any two people swapped
+    // used in simulated annealing algorithm
     public int[][] getNeighbor() {
         Random random = new Random();
         int i1 = random.nextInt(14);
@@ -228,13 +227,29 @@ public class SeatingChart {
     }
 
     // Acceptance Probability Function of the Metropolis-Hastings Algorithm
+    // in simulated annealing we dont want to only change to a new state if the state has a better score
+    // we want the global maximum score of the classroom, rather than the local maximum score
+    // because of this, sometimes, we randomly change our current_state to a worse state
+    // however, we keep note of the best classroom, throughout the process
+    // we automatically return 1.0, if the neighbor score is greater
     public double P(double state_score, double neighbor_score, double temp) {
         if(neighbor_score >= state_score) return 1.0;
         return Math.exp((neighbor_score-state_score)/temp);
     }
 
-    //2nd sorting algorithm which refines the seating chart made by the greedy algorithm
-    //implementation of Simulated Annealing algorithm
+    // 2nd sorting algorithm which refines the seating chart made by the greedy algorithm
+    // implementation of Simulated Annealing algorithm -> essentially "evolves" our classroom
+    // time -> how many iterations so far
+    // limit -> the time we choose where we stop evolving, I chose 10^6 because it was large enough such that the evolution was good but small enough such that the program didn't take too long
+    // current_state -> the array that we evolve throughout the process
+    // current_state_score -> the score of the current_state
+    // classroom -> our best classroom
+    // current_best_score -> score of best classroom
+    // temperature -> a means of controlling randomness of evolution
+    // at the beginning, we want lots of variation in our evolutions, so that we can get past the local maximum mentioned earlier
+    // near the end, we want to converge onto a specific classroom, so the randomness goes down 
+    // temperature controls how random our moes are
+    // it is used in the probability P function, and I specifically chose 0.99998 because I found it had the best transition from random to not random 
     public void sort2(double current_best_score) {
         int time = 0;
         int limit = 1000000;
@@ -251,6 +266,8 @@ public class SeatingChart {
                     }
                 }
             }
+            mean_score(classroom);
+
             if(P(current_state_score, next_score, temperature) >= Math.random()) {
                 for(int i = 0; i < next.length; i++) {
                     for(int j = 0; j < next[i].length; j++) {
