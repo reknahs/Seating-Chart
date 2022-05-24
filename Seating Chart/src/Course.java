@@ -5,13 +5,13 @@ import java.util.Scanner;
 import java.util.UUID;
 import java.util.Set;
 
-public class Class {
+public class Course {
 
     public Hashtable< Integer, Student> students = new Hashtable< Integer, Student>();
     private Set<Integer> setOfKeys = students.keySet();
 
 
-    public Class (File file) throws FileNotFoundException {
+    public Course (File file) throws FileNotFoundException {
         Scanner scan = new Scanner(file);
 
         while (scan.hasNextLine()) {
@@ -44,7 +44,7 @@ public class Class {
 
     public static void main (String[] args) throws FileNotFoundException {
         File file = new File("roster.txt");
-        Class c = new Class(file);
+        Course c = new Course(file);
         c.listStudents();
     }
 

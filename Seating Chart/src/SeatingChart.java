@@ -7,11 +7,11 @@ public class SeatingChart {
     private int[][] current_state; // used as the current evolutionary marker for the simulated annealing algorithm
     private ArrayList<String> priorities; // has priorities in order, most prioritized at the front
     private ArrayList<Student> students; // every student
-    private Class students_id; // gets Student object based on student id
+    private Course students_id; // gets Student object based on student id
 
     // contructor
     // calls each of the sorting algorithms
-    public SeatingChart(int[][] classroom, Class students, ArrayList<String> priorities, ArrayList<Student> TEMPORARY) {
+    public SeatingChart(int[][] classroom, Course students, ArrayList<String> priorities, ArrayList<Student> TEMPORARY) {
         this.classroom = classroom;
         this.students = new ArrayList();
         // for(int s: students.getStudentDict().keySet()) {

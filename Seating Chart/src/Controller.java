@@ -17,6 +17,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -39,10 +40,12 @@ public class Controller implements Initializable{
     private ComboBox<Student> avoid;
     @FXML
     private ComboBox<Student> near;
+    @FXML
+    private GridPane classroomGrid;
 
 
 
-    private Class c;
+    private Course c;
     private Student student;
 
     private Stage stage;
@@ -54,7 +57,7 @@ public class Controller implements Initializable{
     public void initialize(URL arg0, ResourceBundle arg1){
         File file = new File("G:/My Drive/IntroCS Workspace/Seating-Chart/Seating Chart/src//roster.txt");
         try {
-            c = new Class(file);
+            c = new Course(file);
         } catch (FileNotFoundException e) { 
             System.out.println("well damn");
         }
@@ -73,10 +76,10 @@ public class Controller implements Initializable{
                 studentLabel.setText(student.toString());
                 visibility.setSelected(student.getEyesight());
                 hearing.setSelected(student.getHearing());
+                if (student.getNear().size() == 0) near.getSelectionModel().clearSelection();
             }
             
         });
-
         }            
     
     public void visibility () {
