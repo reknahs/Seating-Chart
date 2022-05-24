@@ -22,7 +22,10 @@ public class Student {
     public Student (String first, String last) {
         firstName = first;
         lastName = last;
+        eyesight = false;
+        hearing = false;
     }
+    
 
     public String getFirstName () {
         return firstName;
@@ -63,4 +66,18 @@ public class Student {
     public int getId () {
         return id;
     }
+
+    @Override
+    public String toString () {
+        return (firstName + " " + lastName);
+    }
+
+    public void setSight (boolean bool) {
+        eyesight = bool;
+    }
+
+    public void setHearing (boolean bool) {
+        hearing = bool;
+    }
+
     }
