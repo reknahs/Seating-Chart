@@ -11,14 +11,13 @@ public class SeatingChart {
 
     // contructor
     // calls each of the sorting algorithms
-    public SeatingChart(int[][] classroom, Course students, ArrayList<String> priorities, ArrayList<Student> TEMPORARY) {
+    public SeatingChart(int[][] classroom, Course students, ArrayList<String> priorities) {
         this.classroom = classroom;
         this.students = new ArrayList();
-        // for(int s: students.getStudentDict().keySet()) {
-        //     this.students.add(students.getStudentDict().get(s));
-        // }
+        for(int s: students.getStudentDict().keySet()) {
+            this.students.add(students.getStudentDict().get(s));
+        }
         this.students_id = students;
-        this.students = TEMPORARY;
         this.priorities = priorities; 
         getBestChart();
         int iterator = 0;
@@ -38,7 +37,11 @@ public class SeatingChart {
         
         for(int[] i: classroom) {
             for(int j: i) {
-                System.out.print(j+" ");
+                if(j == 0) {
+                    System.out.print(0+" ");
+                    continue;
+                }
+                System.out.print(students_id.getStudent(j).getFirstName()+students_id.getStudent(j).getEyesight()+" ");
             }
             System.out.println();
         }
@@ -252,7 +255,7 @@ public class SeatingChart {
     // it is used in the probability P function, and I specifically chose 0.99998 because I found it had the best transition from random to not random 
     public void sort2(double current_best_score) {
         int time = 0;
-        int limit = 1000000;
+        int limit = 100000;
         double current_state_score = current_best_score;
         double temperature = 100000000;
         while(time < limit) {

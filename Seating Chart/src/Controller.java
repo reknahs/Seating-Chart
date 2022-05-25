@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -91,8 +92,8 @@ public class Controller implements Initializable{
                 avoidList.getItems().clear();
                 student = listView.getSelectionModel().getSelectedItem();
                 studentLabel.setText(student.toString());
-                visibility.setSelected(student.getEyesight());
-                hearing.setSelected(student.getHearing());
+                visibility.setSelected(!student.getEyesight());
+                hearing.setSelected(!student.getHearing());
                 for (Student s: student.getNear()){
                     if (s != null) nearList.getItems().add(s);
                 }
@@ -170,16 +171,32 @@ public class Controller implements Initializable{
         priorities.add("Hearing");
         priorities.add("Near");
         priorities.add("Avoid");
-        SeatingChart chart = new SeatingChart(classroom, c, priorities, studentList);
-        for (int row = 0; row < classroom.length-1; row++) {
-            for (int col = 0; col < classroom[row].length-1; col++) {
-                System.out.println(classroom[row][col]);
+        System.out.println("test");
+        SeatingChart chart = new SeatingChart(classroom, c, priorities);
+        classroom = chart.getClassroom();
+        for (int row = 0; row < 14; row++) {
+            for (int col = 0; col < 14; col++) {
+                Button seat = (Button) getNodeFromGridPane(classroomGrid, col, row);
+                if (classroom[row][col] == 0) seat.setText("");
+                else if (classroom[row][col] == 1) seat.setText("X");
+                else seat.setText(c.getStudent(classroom[row][col]).toString());
+            }
+            
+        }
+
+        }
+    
+    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+        for (Node node : classroomGrid.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                return node;
             }
         }
-        
+            return null;
+        }
     }
 
-}
+
 
     /*public void initialize() {
         String javaVersion = System.getProperty("java.version");

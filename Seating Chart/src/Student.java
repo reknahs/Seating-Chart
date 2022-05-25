@@ -4,17 +4,15 @@ public class Student {
     
     private String firstName;
     private String lastName;
-    private int grade;
     private boolean eyesight;
     private boolean hearing; 
-    private ArrayList<Student> near = new ArrayList();
-    private ArrayList<Student> avoid = new ArrayList();
+    private ArrayList<Student> near = new ArrayList<Student>();
+    private ArrayList<Student> avoid = new ArrayList<Student>();
     private int id;
 
-    public Student (String first, String last, int grade, boolean eyesight, boolean hearing) {
+    public Student (String first, String last, boolean eyesight, boolean hearing) {
         firstName = first;
         lastName = last;
-        this.grade = grade;
         this.eyesight = eyesight;
         this.hearing = hearing;
     }
@@ -22,8 +20,8 @@ public class Student {
     public Student (String first, String last) {
         firstName = first;
         lastName = last;
-        eyesight = false;
-        hearing = false;
+        eyesight = true;
+        hearing = true;
     }
     
 
@@ -73,11 +71,11 @@ public class Student {
     }
 
     public void setSight (boolean bool) {
-        eyesight = bool;
+        eyesight = !bool;
     }
 
     public void setHearing (boolean bool) {
-        hearing = bool;
+        hearing = !bool;
     }
 
     }
