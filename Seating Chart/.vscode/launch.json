@@ -6,10 +6,11 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Launch App",
+            "name": "Launch FinalProject",
             "request": "launch",
-            "mainClass": "gui",
+            "mainClass": "FinalProject",
+            "projectName": "Seating Chart_5234f33f",
             "vmArgs": "--module-path C:/Users/khadi/Downloads/javafx-sdk-18.0.1/lib --add-modules javafx.controls,javafx.fxml"
-        }
+        },
     ]
 }
