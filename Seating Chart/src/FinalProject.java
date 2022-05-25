@@ -122,8 +122,7 @@ public class FinalProject extends Application{
             testing();
             break;
             case 2:
-            //make sure to update launch.json to run finalProject, not gui
-            //controller.java holds actual code then for handling user input after that
+            //make sure to update launch.json to run finalProject
             launch(args);
             break;
             case 3:
