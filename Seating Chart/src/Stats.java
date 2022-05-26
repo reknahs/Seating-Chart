@@ -109,7 +109,7 @@ public class Stats {
             for(int j = 0; j < info.size(); j++) {
                 print.print(info.get(j)[i]+" ");
             }
-            print.println("\n");
+            print.println();
         }        
     }
 }

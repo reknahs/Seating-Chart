@@ -229,9 +229,11 @@ public class SeatingChart {
     // because of this, sometimes, we randomly change our current_state to a worse state
     // however, we keep note of the best classroom, throughout the process
     // we automatically return 1.0, if the neighbor score is greater
-    public double P(double state_score, double neighbor_score, double temp) {
+    public double P(double state_score, double neighbor_score, double temp, ArrayList<double[]> info, int num) {
         if(neighbor_score >= state_score) return 1.0;
-        return Math.exp((neighbor_score-state_score)/temp);
+        double prob = Math.exp((neighbor_score-state_score)/temp);
+        info.get(2)[num] = prob;
+        return prob;
     }
 
     // 2nd sorting algorithm which refines the seating chart made by the greedy algorithm
@@ -267,7 +269,7 @@ public class SeatingChart {
                     }
                 }
             }
-            if(P(current_state_score, next_score, temperature) >= Math.random()) {
+            if(P(current_state_score, next_score, temperature, info, time) >= Math.random()) {
                 for(int i = 0; i < next.length; i++) {
                     for(int j = 0; j < next[i].length; j++) {
                         current_state[i][j] = next[i][j];
@@ -277,8 +279,6 @@ public class SeatingChart {
             }
             info.get(0)[time] = temperature;
             info.get(1)[time] = current_best_score;
-            info.get(2)[time] = current_state_score;
-
             temperature *= 0.99998;
             time++;
         }
