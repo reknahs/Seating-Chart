@@ -11,12 +11,18 @@ public class SeatingChart {
 
     // contructor
     // calls each of the sorting algorithms
-    public SeatingChart(int[][] classroom, Course students, ArrayList<String> priorities) {
+    public SeatingChart(int[][] classroom, Course students, ArrayList<String> priorities, ArrayList<Student> studentList) {
         this.classroom = classroom;
         this.students = new ArrayList();
-        for(int s: students.getStudentDict().keySet()) {
-            this.students.add(students.getStudentDict().get(s));
+        if(studentList.size() > 0) {
+            this.students = studentList;
         }
+        else {
+            for(int s: students.getStudentDict().keySet()) {
+                this.students.add(students.getStudentDict().get(s));
+            }
+        }
+
         this.students_id = students;
         this.priorities = priorities; 
         getBestChart();
