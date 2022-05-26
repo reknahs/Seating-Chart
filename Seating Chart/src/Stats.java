@@ -100,5 +100,6 @@ public class Stats {
         priorities.add("Near");
         priorities.add("Avoid");
         SeatingChart chart = new SeatingChart(classroom, a, priorities, students);
+        ArrayList<double[]> info = chart.getInfo();
     }
 }

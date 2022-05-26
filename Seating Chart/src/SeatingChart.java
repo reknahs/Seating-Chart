@@ -8,6 +8,7 @@ public class SeatingChart {
     private ArrayList<String> priorities; // has priorities in order, most prioritized at the front
     private ArrayList<Student> students; // every student
     private Course students_id; // gets Student object based on student id
+    private ArrayList<double[]> info; // stores info;
 
     // contructor
     // calls each of the sorting algorithms
@@ -63,6 +64,11 @@ public class SeatingChart {
     // returns sorted classroom after SeatingChart object declared
     public int[][] getClassroom() {
         return classroom;
+    }
+
+    // returns info
+    public ArrayList<double[]> getInfo() {
+        return info;
     }
 
     // part of initial sorting algorithm, finds the bounds of all the current sorting 
@@ -260,8 +266,12 @@ public class SeatingChart {
     // temperature controls how random our moes are
     // it is used in the probability P function, and I specifically chose 0.99998 because I found it had the best transition from random to not random 
     public void sort2(double current_best_score) {
+        info = new ArrayList();
         int time = 0;
         int limit = 100000;
+        info.add(new double[limit]);
+        info.add(new double[limit]);
+        info.add(new double[limit]);
         double current_state_score = current_best_score;
         double temperature = 100000000;
         while(time < limit) {
@@ -283,6 +293,10 @@ public class SeatingChart {
                 }                
                 current_state_score = next_score;
             }
+            info.get(0)[time] = temperature;
+            info.get(1)[time] = current_best_score;
+            info.get(2)[time] = current_state_score;
+
             temperature *= 0.99998;
             time++;
         }
