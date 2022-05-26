@@ -40,25 +40,7 @@ public class SeatingChart {
         }
 
         double curr_score = mean_score(this.classroom);
-
-        
-        for(int[] i: classroom) {
-            for(int j: i) {
-                if(j == 0) {
-                    System.out.print(0+" ");
-                    continue;
-                }
-                System.out.print(students_id.getStudent(j).getFirstName()+students_id.getStudent(j).getEyesight()+" ");
-            }
-            System.out.println();
-        }
         sort2(curr_score);
-        for(int[] i: this.classroom) {
-            for(int j: i) {
-                System.out.print(j+" ");
-            }
-            System.out.println();
-        }
     }
 
     // returns sorted classroom after SeatingChart object declared
@@ -268,7 +250,7 @@ public class SeatingChart {
     public void sort2(double current_best_score) {
         info = new ArrayList();
         int time = 0;
-        int limit = 100000;
+        int limit = 1000000;
         info.add(new double[limit]);
         info.add(new double[limit]);
         info.add(new double[limit]);
