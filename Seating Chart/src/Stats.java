@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 public class Stats {
     public static void main(String[] args) throws FileNotFoundException {
         int[][] classroom = new int[14][14];
@@ -101,5 +103,13 @@ public class Stats {
         priorities.add("Avoid");
         SeatingChart chart = new SeatingChart(classroom, a, priorities, students);
         ArrayList<double[]> info = chart.getInfo();
+        File file = new File("info.txt");
+        PrintStream print = new PrintStream(file);
+        for(int i = 0; i < info.get(0).length; i++) {
+            for(int j = 0; j < info.size(); j++) {
+                print.print(info.get(j)[i]+" ");
+            }
+            print.println("\n");
+        }        
     }
 }
