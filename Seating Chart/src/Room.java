@@ -4,7 +4,8 @@
 //       If the seat value is 1, then there is a desk at that coordinate, but no student there.
 //       If the seat value is an integer which is not 1, then there is a desk and a student at that coordinate.
 //       
-
+import java.lang.Math;
+ 
 
 
 
@@ -72,8 +73,34 @@ public class Room {
             
 
         }
+
     
             
+    public double getDistance(int id1, int id2) {
+        int a, b, c, d;
+        a = b = c = d = 0;
+        for (int x1 = 0; x1 < 14; x1++) {
+            for (int y1 = 0; y1 < 14; y1++) {
+                if (room[x1][y1] == id1) {
+                     a = x1;
+                     b = y1;
+                }
+            }
+        }
         
-
+        for (int x2 = 0; x2 < 14; x2++) {
+            for (int y2 = 0; y2 < 14; y2++) {
+                if (room[x2][y2] == id1) {
+                    c = x2;
+                    d = y2;
+                }
+            }
+        }
+        double square = Math.pow((a+c), 2) + Math.pow((b+d), 2);
+        double distance = Math.pow(square, 0.5);
+        return distance;  
+        
     }
+}
+
+    
