@@ -252,7 +252,7 @@ public class SeatingChart {
     public void sort2(double current_best_score) {
         info = new ArrayList();
         int time = 0;
-        int limit = 1000000;
+        int limit = 400000;
         info.add(new double[limit]);
         info.add(new double[limit]);
         info.add(new double[limit]);
