@@ -8,15 +8,22 @@ public class SeatingChart {
     private ArrayList<String> priorities; // has priorities in order, most prioritized at the front
     private ArrayList<Student> students; // every student
     private Course students_id; // gets Student object based on student id
+    private ArrayList<double[]> info; // stores info;
 
     // contructor
     // calls each of the sorting algorithms
-    public SeatingChart(int[][] classroom, Course students, ArrayList<String> priorities) {
+    public SeatingChart(int[][] classroom, Course students, ArrayList<String> priorities, ArrayList<Student> studentList) {
         this.classroom = classroom;
         this.students = new ArrayList();
-        for(int s: students.getStudentDict().keySet()) {
-            this.students.add(students.getStudentDict().get(s));
+        if(studentList.size() > 0) {
+            this.students = studentList;
         }
+        else {
+            for(int s: students.getStudentDict().keySet()) {
+                this.students.add(students.getStudentDict().get(s));
+            }
+        }
+
         this.students_id = students;
         this.priorities = priorities; 
         getBestChart();
@@ -33,30 +40,17 @@ public class SeatingChart {
         }
 
         double curr_score = mean_score(this.classroom);
-
-        
-        for(int[] i: classroom) {
-            for(int j: i) {
-                if(j == 0) {
-                    System.out.print(0+" ");
-                    continue;
-                }
-                System.out.print(students_id.getStudent(j).getFirstName()+students_id.getStudent(j).getEyesight()+" ");
-            }
-            System.out.println();
-        }
         sort2(curr_score);
-        for(int[] i: this.classroom) {
-            for(int j: i) {
-                System.out.print(j+" ");
-            }
-            System.out.println();
-        }
     }
 
     // returns sorted classroom after SeatingChart object declared
     public int[][] getClassroom() {
         return classroom;
+    }
+
+    // returns info
+    public ArrayList<double[]> getInfo() {
+        return info;
     }
 
     // part of initial sorting algorithm, finds the bounds of all the current sorting 
@@ -235,9 +229,11 @@ public class SeatingChart {
     // because of this, sometimes, we randomly change our current_state to a worse state
     // however, we keep note of the best classroom, throughout the process
     // we automatically return 1.0, if the neighbor score is greater
-    public double P(double state_score, double neighbor_score, double temp) {
+    public double P(double state_score, double neighbor_score, double temp, ArrayList<double[]> info, int num) {
         if(neighbor_score >= state_score) return 1.0;
-        return Math.exp((neighbor_score-state_score)/temp);
+        double prob = Math.exp((neighbor_score-state_score)/temp);
+        info.get(2)[num] = prob;
+        return prob;
     }
 
     // 2nd sorting algorithm which refines the seating chart made by the greedy algorithm
@@ -254,8 +250,12 @@ public class SeatingChart {
     // temperature controls how random our moes are
     // it is used in the probability P function, and I specifically chose 0.99998 because I found it had the best transition from random to not random 
     public void sort2(double current_best_score) {
+        info = new ArrayList();
         int time = 0;
-        int limit = 1000000;
+        int limit = 400000;
+        info.add(new double[limit]);
+        info.add(new double[limit]);
+        info.add(new double[limit]);
         double current_state_score = current_best_score;
         double temperature = 100000000;
         while(time < limit) {
@@ -269,7 +269,7 @@ public class SeatingChart {
                     }
                 }
             }
-            if(P(current_state_score, next_score, temperature) >= Math.random()) {
+            if(P(current_state_score, next_score, temperature, info, time) >= Math.random()) {
                 for(int i = 0; i < next.length; i++) {
                     for(int j = 0; j < next[i].length; j++) {
                         current_state[i][j] = next[i][j];
@@ -277,6 +277,8 @@ public class SeatingChart {
                 }                
                 current_state_score = next_score;
             }
+            info.get(0)[time] = temperature;
+            info.get(1)[time] = current_best_score;
             temperature *= 0.99998;
             time++;
         }
