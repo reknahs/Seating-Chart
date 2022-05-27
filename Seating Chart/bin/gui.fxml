@@ -77,7 +77,7 @@
                </children></AnchorPane>
       </content>
     </Tab>
-    <Tab text="Classrrom">
+    <Tab text="Classroom">
          <content>
             <GridPane fx:id="classroomGrid">
               <columnConstraints>

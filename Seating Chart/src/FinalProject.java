@@ -111,7 +111,8 @@ public class FinalProject extends Application{
         priorities.add("Hearing");
         priorities.add("Near");
         priorities.add("Avoid");
-        return new SeatingChart(classroom, a, priorities);
+        ArrayList<Student> x = new ArrayList<Student>();
+        return new SeatingChart(classroom, a, priorities, x);
     }
     
     public static void main(String[] args) throws FileNotFoundException {
