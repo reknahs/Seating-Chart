@@ -176,7 +176,8 @@ public class Controller implements Initializable{
         priorities.add("Near");
         priorities.add("Avoid");
         System.out.println("test");
-        SeatingChart chart = new SeatingChart(classroom, c, priorities);
+        ArrayList<Student> filler = new ArrayList();
+        SeatingChart chart = new SeatingChart(classroom, c, priorities, filler);
         classroom = chart.getClassroom();
         for (int row = 0; row < 14; row++) {
             for (int col = 0; col < 14; col++) {
