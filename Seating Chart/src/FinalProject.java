@@ -111,11 +111,11 @@ public class FinalProject extends Application{
         priorities.add("Hearing");
         priorities.add("Near");
         priorities.add("Avoid");
-        return new SeatingChart(classroom, a, priorities, students);
+        return new SeatingChart(classroom, a, priorities);
     }
     
     public static void main(String[] args) throws FileNotFoundException {
-        System.out.println("1 for testing, 2 for with gui, 3 for without");
+        System.out.println("1 for testing, 2 for with gui");
         int response = scan.nextInt();
         switch (response) {
             case 1:
@@ -125,19 +125,8 @@ public class FinalProject extends Application{
             //make sure to update launch.json to run finalProject
             launch(args);
             break;
-            case 3:
-            backupPlan();
-            break;
 
         }
-        
-    }
-
-
-    public static void backupPlan () throws FileNotFoundException {
-        System.out.println("Enter pathname for roster file");
-        File file = new File(scan.nextLine());
-        Course course = new Course(file);
         
     }
 

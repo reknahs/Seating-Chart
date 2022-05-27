@@ -255,7 +255,7 @@ public class SeatingChart {
     // it is used in the probability P function, and I specifically chose 0.99998 because I found it had the best transition from random to not random 
     public void sort2(double current_best_score) {
         int time = 0;
-        int limit = 100000;
+        int limit = 1000000;
         double current_state_score = current_best_score;
         double temperature = 100000000;
         while(time < limit) {

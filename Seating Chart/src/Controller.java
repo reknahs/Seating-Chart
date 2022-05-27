@@ -108,9 +108,11 @@ public class Controller implements Initializable{
 
             @Override
             public void changed(ObservableValue<? extends Student> arg0, Student arg1, Student arg2) {
-                student.setNear(near.getSelectionModel().getSelectedItem()); 
-                nearList.getItems().add(near.getSelectionModel().getSelectedItem());
-                near.getSelectionModel().clearSelection();               
+                Student s = near.getSelectionModel().getSelectedItem();
+                if (s!= null) {
+                student.setNear(s); 
+                nearList.getItems().add(s);
+                near.getSelectionModel().clearSelection();   }            
             }
             
         });
@@ -120,9 +122,11 @@ public class Controller implements Initializable{
 
             @Override
             public void changed(ObservableValue<? extends Student> arg0, Student arg1, Student arg2) {
-                student.setAvoid(avoid.getSelectionModel().getSelectedItem()); 
-                avoidList.getItems().add(avoid.getSelectionModel().getSelectedItem());
-                avoid.getSelectionModel().clearSelection();               
+                Student s = avoid.getSelectionModel().getSelectedItem();
+                if (s!=null) {
+                student.setAvoid(s); 
+                avoidList.getItems().add(s);
+                avoid.getSelectionModel().clearSelection();   }            
             }
             
         });
